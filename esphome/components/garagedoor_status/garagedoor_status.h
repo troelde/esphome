@@ -7,13 +7,11 @@
 #define OPEN_THRESHOLD_DISTANCE 500  // mm
 
 namespace esphome {
-namespace garagedoor_sensor {
+namespace garagedoor_status {
 
-class Garagedoor_sensor : public PollingComponent, public binary_sensor::BinarySensor {
+class garagedoor_status : public PollingComponent, public binary_sensor::BinarySensor {
  public:
-  //  binary_sensor::BinarySensor *door_status = new binary_sensor::BinarySensor();
-
-  Garagedoor_sensor() : PollingComponent(2000) {}
+  garagedoor_status() : PollingComponent(2000) {}
   void setup() override;
   void on_shutdown() override;
   void update() override;
@@ -24,5 +22,5 @@ class Garagedoor_sensor : public PollingComponent, public binary_sensor::BinaryS
   VL53L0X sensor;
 };
 
-}  // namespace garagedoor_sensor
+}  // namespace garagedoor_status
 }  // namespace esphome

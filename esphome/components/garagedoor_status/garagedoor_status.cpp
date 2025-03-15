@@ -1,23 +1,23 @@
 #include "esphome/core/log.h"
-#include "garagedoor_sensor.h"
+#include "garagedoor_status.h"
 #include <Wire.h>
 #include <VL53L0X.h>
 
 namespace esphome {
-namespace garagedoor_sensor {
+namespace garagedoor_status {
 
-static const char *TAG = "garagedoor.sensor";
+static const char *TAG = "garagedoor.status";
 
-void Garagedoor_sensor::setup() {
+void garagedoor_status::setup() {
   // door_status->set_device_class("garage_door");
   // set_device_class("garage_door");
   Wire.begin();
   initializeSensor();
 }
 
-void Garagedoor_sensor::on_shutdown() {}
+void garagedoor_status::on_shutdown() {}
 
-void Garagedoor_sensor::update() {
+void garagedoor_status::update() {
   int dist = sensor.readRangeSingleMillimeters();
   if (sensor.timeoutOccurred()) {
     ESP_LOGW(TAG, " TIMEOUT");
@@ -34,9 +34,9 @@ void Garagedoor_sensor::update() {
   }
 }
 
-void Garagedoor_sensor::dump_config() {}
+void garagedoor_status::dump_config() {}
 
-void Garagedoor_sensor::initializeSensor() {
+void garagedoor_status::initializeSensor() {
   sensor.setTimeout(500);
   if (!sensor.init()) {
     ESP_LOGE(TAG, "Failed to detect and initialize sensor!");
@@ -47,5 +47,5 @@ void Garagedoor_sensor::initializeSensor() {
   sensor.setMeasurementTimingBudget(200000);
 }
 
-}  // namespace garagedoor_sensor
+}  // namespace garagedoor_status
 }  // namespace esphome

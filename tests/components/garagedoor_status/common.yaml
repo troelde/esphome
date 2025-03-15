@@ -4,8 +4,8 @@ esphome:
     - pololu/VL53L0X@^1.3.1
 
 binary_sensor:
-  - platform: garagedoor_sensor
-    name: "Garage door sensor"
+  - platform: garagedoor_status
+    name: "Garage door status"
 #switch:
 #  - platform: restart
 #    name: "Omstart garasjeport 20D"

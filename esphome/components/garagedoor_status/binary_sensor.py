@@ -3,9 +3,9 @@ from esphome.components import binary_sensor
 import esphome.config_validation as cv
 from esphome.const import DEVICE_CLASS_GARAGE_DOOR
 
-garagedoor_sensor_ns = cg.esphome_ns.namespace("garagedoor_sensor")
+garagedoor_sensor_ns = cg.esphome_ns.namespace("garagedoor_status")
 garagedoor_sensor_Component = garagedoor_sensor_ns.class_(
-    "Garagedoor_sensor", cg.PollingComponent, binary_sensor.BinarySensor
+    "garagedoor_status", cg.PollingComponent, binary_sensor.BinarySensor
 )
 
 CONFIG_SCHEMA = binary_sensor.binary_sensor_schema(
