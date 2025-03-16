@@ -9,27 +9,23 @@ namespace garagedoor_status {
 static const char *TAG = "garagedoor.status";
 
 void garagedoor_status::setup() {
-  // door_status->set_device_class("garage_door");
-  // set_device_class("garage_door");
   Wire.begin();
   initializeSensor();
 }
 
-void garagedoor_status::on_shutdown() {}
+void garagedoor_status::on_shutdown() { sensor.stopContinuous(); }
 
 void garagedoor_status::update() {
-  int dist = sensor.readRangeSingleMillimeters();
+  unsigned long startTime = millis();
+  int dist = sensor.readRangeContinuousMillimeters();
+  unsigned long elapsedTime = millis() - startTime;
+  ESP_LOGD(TAG, "Elapsed ms: %d ms", elapsedTime);
   if (sensor.timeoutOccurred()) {
     ESP_LOGW(TAG, " TIMEOUT");
     initializeSensor();
-  } else if (dist == 255) {  // Error condition
-    ESP_LOGW(TAG, "'255' condition");
-    initializeSensor();
   } else {
-    // distance_sensor->publish_state(dist);
     ESP_LOGD(TAG, "Distance measured: %d mm", dist);
     bool door_open = dist < OPEN_THRESHOLD_DISTANCE;
-    // door_status->publish_state(door_open);
     publish_state(door_open);
   }
 }
@@ -37,14 +33,13 @@ void garagedoor_status::update() {
 void garagedoor_status::dump_config() {}
 
 void garagedoor_status::initializeSensor() {
-  sensor.setTimeout(500);
+  sensor.setTimeout(30);
   if (!sensor.init()) {
     ESP_LOGE(TAG, "Failed to detect and initialize sensor!");
     mark_failed();
   }
 
-  // increase timing budget to 200 ms
-  sensor.setMeasurementTimingBudget(200000);
+  sensor.startContinuous();
 }
 
 }  // namespace garagedoor_status

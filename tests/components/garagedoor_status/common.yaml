@@ -6,6 +6,7 @@ esphome:
 binary_sensor:
   - platform: garagedoor_status
     name: "Garage door status"
+    update_interval: 5s
 #switch:
 #  - platform: restart
 #    name: "Omstart garasjeport 20D"
