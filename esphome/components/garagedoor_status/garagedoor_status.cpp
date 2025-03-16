@@ -33,13 +33,14 @@ void garagedoor_status::update() {
 void garagedoor_status::dump_config() {}
 
 void garagedoor_status::initializeSensor() {
-  sensor.setTimeout(30);
-
+  ESP_LOGD(TAG, "Initializing sensor...");
   if (!sensor.init()) {
     ESP_LOGE(TAG, "Failed to detect and initialize sensor!");
     mark_failed();
   }
+  ESP_LOGD(TAG, "Initialization finished.");
 
+  //  sensor.setTimeout(30);
   sensor.startContinuous();
 }
 
