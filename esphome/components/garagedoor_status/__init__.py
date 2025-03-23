@@ -1,0 +1,4 @@
+CODEOWNERS = ["@troelde"]
+DEPENDENCIES = []
+AUTO_LOAD = []
+MULTI_CONF = False
