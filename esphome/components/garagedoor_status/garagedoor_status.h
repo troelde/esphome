@@ -17,8 +17,15 @@ class garagedoor_status : public PollingComponent, public binary_sensor::BinaryS
   void update() override;
   void dump_config() override;
 
+  void setTimeout(uint16_t timeout) { timeout_ = timeout; }
+  void setRateLimit(float limit_Mcps) { limit_Mcps_ = limit_Mcps; }
+  void setTimingBudget(uint32_t budget_us) { budget_us_ = budget_us; }
+
  private:
   void initializeSensor();
+  uint16_t timeout_;
+  float limit_Mcps_;
+  uint32_t budget_us_;
   VL53L0X sensor;
 };
 

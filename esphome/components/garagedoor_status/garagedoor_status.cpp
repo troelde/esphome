@@ -30,7 +30,15 @@ void garagedoor_status::update() {
   }
 }
 
-void garagedoor_status::dump_config() {}
+void garagedoor_status::dump_config() {
+  ESP_LOGCONFIG(TAG, "Garage door sensor:");
+  ESP_LOGCONFIG(TAG, "  Signal rate limit: %.2f MCPS", limit_Mcps_);
+  ESP_LOGCONFIG(TAG, "  Measuring timing budget: %u microseconds", budget_us_);
+  if (timeout_ > 0)
+    ESP_LOGCONFIG(TAG, "  Timeout period: %u milliseconds", timeout_);
+  else
+    ESP_LOGCONFIG(TAG, "  Timeout period: Disabled");
+}
 
 void garagedoor_status::initializeSensor() {
   ESP_LOGD(TAG, "Initializing sensor...");
@@ -38,10 +46,18 @@ void garagedoor_status::initializeSensor() {
     ESP_LOGE(TAG, "Failed to detect and initialize sensor!");
     mark_failed();
   }
-  ESP_LOGD(TAG, "Initialization finished.");
 
-  //  sensor.setTimeout(30);
+  sensor.setTimeout(timeout_);
+  timeout_ = sensor.getTimeout();
+  if (!sensor.setSignalRateLimit(limit_Mcps_)) {
+    ESP_LOGE(TAG, "Failed to call setSignalRateLimit(%.2f)!", limit_Mcps_);
+    mark_failed();
+  }
+  limit_Mcps_ = sensor.getSignalRateLimit();
+  sensor.setMeasurementTimingBudget(budget_us_);
+  budget_us_ = sensor.getMeasurementTimingBudget();
   sensor.startContinuous();
+  ESP_LOGD(TAG, "Initialization finished.");
 }
 
 }  // namespace garagedoor_status
