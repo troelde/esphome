@@ -14,6 +14,7 @@ void garagedoor_status::setup() {
 }
 
 void garagedoor_status::on_shutdown() { sensor.stopContinuous(); }
+void garagedoor_status::on_safe_shutdown() { sensor.stopContinuous(); }
 
 void garagedoor_status::update() {
   unsigned long startTime = millis();
@@ -51,11 +52,15 @@ void garagedoor_status::initializeSensor() {
   sensor.setTimeout(timeout_);
   timeout_ = sensor.getTimeout();
   if (!sensor.setSignalRateLimit(limit_Mcps_)) {
-    ESP_LOGE(TAG, "Failed to call setSignalRateLimit(%.2f)!", limit_Mcps_);
+    ESP_LOGE(TAG, "Failed in call to setSignalRateLimit(%.2f)!", limit_Mcps_);
     mark_failed();
   }
   limit_Mcps_ = sensor.getSignalRateLimit();
-  sensor.setMeasurementTimingBudget(budget_us_);
+  if (!sensor.setMeasurementTimingBudget(budget_us_)) {
+    ESP_LOGE(TAG, "Failed in call to setMeasurementTimingBudget! Invalid parameter value: %u mm", budget_us_);
+    mark_failed();
+  }
+
   budget_us_ = sensor.getMeasurementTimingBudget();
   sensor.startContinuous();
   ESP_LOGD(TAG, "Initialization finished.");

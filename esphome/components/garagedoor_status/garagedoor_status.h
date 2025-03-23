@@ -12,6 +12,7 @@ class garagedoor_status : public PollingComponent, public binary_sensor::BinaryS
   garagedoor_status() : PollingComponent(2000) {}
   void setup() override;
   void on_shutdown() override;
+  void on_safe_shutdown() override;
   void update() override;
   void dump_config() override;
 
