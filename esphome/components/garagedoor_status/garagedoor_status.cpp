@@ -25,7 +25,7 @@ void garagedoor_status::update() {
     initializeSensor();
   } else {
     ESP_LOGD(TAG, "Distance measured: %d mm", dist);
-    bool door_open = dist < OPEN_THRESHOLD_DISTANCE;
+    bool door_open = dist < dist_mm_;
     publish_state(door_open);
   }
 }
@@ -34,6 +34,7 @@ void garagedoor_status::dump_config() {
   ESP_LOGCONFIG(TAG, "Garage door sensor:");
   ESP_LOGCONFIG(TAG, "  Signal rate limit: %.2f MCPS", limit_Mcps_);
   ESP_LOGCONFIG(TAG, "  Measuring timing budget: %u microseconds", budget_us_);
+  ESP_LOGCONFIG(TAG, "  Threshold distance : %u mm", dist_mm_);
   if (timeout_ > 0)
     ESP_LOGCONFIG(TAG, "  Timeout period: %u milliseconds", timeout_);
   else
