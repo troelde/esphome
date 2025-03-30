@@ -13,8 +13,14 @@ void garagedoor_status::setup() {
   initializeSensor();
 }
 
-void garagedoor_status::on_shutdown() { sensor.stopContinuous(); }
-void garagedoor_status::on_safe_shutdown() { sensor.stopContinuous(); }
+void garagedoor_status::on_shutdown() {
+  ESP_LOGD(TAG, "on_shutdown()");
+  sensor.stopContinuous();
+}
+void garagedoor_status::on_safe_shutdown() {
+  ESP_LOGD(TAG, "on_safe_shutdown()");
+  sensor.stopContinuous();
+}
 
 void garagedoor_status::update() {
   unsigned long startTime = millis();
@@ -62,6 +68,7 @@ void garagedoor_status::initializeSensor() {
   }
 
   budget_us_ = sensor.getMeasurementTimingBudget();
+  sensor.stopContinuous();  // in case it is still in a wrong state
   sensor.startContinuous();
   ESP_LOGD(TAG, "Initialization finished.");
 }
